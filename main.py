@@ -49,6 +49,8 @@ if __name__ == "__main__":
 
     # Creating translate from language setting
     from_lang_var = StringVar()
+    from_label_var = StringVar()
+    from_label = Label(r, textvariable=from_label_var)
 
     # Sets the from_lang variable to a new value
     def from_tracer(n, m, x):
@@ -64,6 +66,8 @@ if __name__ == "__main__":
 
     # Creating translate to language setting
     to_lang_var = StringVar()
+    to_label_var = StringVar()
+    to_label = Label(r, textvariable=to_label_var)
 
     # Sets the to_lang variable to a new value
     def to_tracer(n, m, x):
@@ -79,9 +83,14 @@ if __name__ == "__main__":
 
     button = Button(r)
 
+    from_label_var.set("From:")
+    to_label_var.set("To:")
+
     # Pack the widgets
     check_auto_button.pack()
+    from_label.pack()
     from_lang_combo.pack()
+    to_label.pack()
     to_lang_combo.pack()
     button.pack()
 
