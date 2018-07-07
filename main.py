@@ -86,6 +86,8 @@ if __name__ == "__main__":
     from_label_var.set("From:")
     to_label_var.set("To:")
 
+    translate_textbox = Entry(r)
+
     # Pack the widgets
     check_auto_button.pack()
     from_label.pack()
@@ -93,5 +95,6 @@ if __name__ == "__main__":
     to_label.pack()
     to_lang_combo.pack()
     button.pack()
+    translate_textbox.pack()
 
     r.mainloop()
