@@ -39,6 +39,7 @@ if __name__ == "__main__":
     r.get_themes()
     r.set_theme("arc")
     Style().configure('.', font='Helvetica')
+    r.resizable(False, False)
 
     # Initialize clipboard upon starting
     curr_clip = r.clipboard_get()
