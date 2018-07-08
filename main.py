@@ -36,6 +36,8 @@ to_lang = "zh-cn"
 if __name__ == "__main__":
     r = Tk()
 
+    r.title("FromNToNFrom")
+
     # Creating auto translate option
     check_auto_var = IntVar()
 
@@ -45,7 +47,7 @@ if __name__ == "__main__":
         auto = check_auto_var.get()
         print(auto)
 
-    check_auto_button = Checkbutton(r, text="Auto", variable=check_auto_var, height=5, width=20, command=update_auto)
+    check_auto_button = Checkbutton(r, text="Auto", variable=check_auto_var, command=update_auto)
 
     # Creating translate from language setting
     from_lang_var = StringVar()
@@ -81,20 +83,23 @@ if __name__ == "__main__":
     to_lang_combo = Combobox(r, state="readonly", width=20, textvariable=to_lang_var)
     to_lang_combo['values'] = list(LANGS.keys())
 
-    button = Button(r)
+    button_text = StringVar()
+    button = Button(r, textvariable=button_text)
+    button_text.set("Translate")
 
     from_label_var.set("From:")
     to_label_var.set("To:")
 
-    translate_textbox = Entry(r)
+    translate_textbox = Entry(r, width=46)
 
-    # Pack the widgets
-    check_auto_button.pack()
-    from_label.pack()
-    from_lang_combo.pack()
-    to_label.pack()
-    to_lang_combo.pack()
-    button.pack()
-    translate_textbox.pack()
+    # Pack the widgets in grids
+    from_label.grid()
+    to_label.grid(row=0, column=1)
+    from_lang_combo.grid(row=1)
+    to_lang_combo.grid(row=1, column=1)
+    check_auto_button.grid(row=1, column=2)
+    translate_textbox.grid(row=2, columnspan=2)
+    button.grid(row=2, column=2)
+
 
     r.mainloop()
