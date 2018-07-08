@@ -49,7 +49,6 @@ if __name__ == "__main__":
         global curr_clip, r
         temp = r.clipboard_get()
         if temp != curr_clip:
-            print("Changed from \n {0} \n to \n {1}".format(curr_clip, temp))
             curr_clip = temp
             return True
         else:
@@ -77,7 +76,6 @@ if __name__ == "__main__":
         else:
             button.config(state=NORMAL)
             r.after_cancel(after_id)
-        print(auto)
 
     check_auto_button = Checkbutton(r, text="Auto", variable=check_auto_var, command=update_auto)
 
@@ -90,7 +88,6 @@ if __name__ == "__main__":
     def from_tracer(n, m, x):
         global from_lang
         from_lang = LANGS[from_lang_var.get()]
-        print("From: {}".format(from_lang))
 
     from_lang_var.set("English")
     from_lang_var.trace('w', from_tracer)
@@ -107,7 +104,6 @@ if __name__ == "__main__":
     def to_tracer(n, m, x):
         global to_lang
         to_lang = LANGS[to_lang_var.get()]
-        print("To: {}".format(to_lang))
 
     to_lang_var.set("Chinese Simplified")
     to_lang_var.trace('w', to_tracer)
@@ -141,6 +137,8 @@ if __name__ == "__main__":
             r.clipboard_clear()
             r.clipboard_append(translated)
             curr_clip = translated
+
+        return translated
 
     button.config(command=translate)
 
