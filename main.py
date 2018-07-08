@@ -39,8 +39,6 @@ if __name__ == "__main__":
     # Initialize clipboard upon starting
     curr_clip = r.clipboard_get()
 
-    print(curr_clip)
-
     r.title("FromNToNFrom")
 
     auto = 0
@@ -51,6 +49,7 @@ if __name__ == "__main__":
         global curr_clip, r
         temp = r.clipboard_get()
         if temp != curr_clip:
+            print("Changed from \n {0} \n to \n {1}".format(curr_clip, temp))
             curr_clip = temp
             return True
         else:
@@ -59,8 +58,7 @@ if __name__ == "__main__":
     # Listens for intervals
     def run_listener(window, interval):
         global after_id
-        if check_clipboard():
-            print("clip updated")
+        check_clipboard()
         after_id = window.after(interval, run_listener, window, interval)
 
     # Creating auto translate option
@@ -122,10 +120,27 @@ if __name__ == "__main__":
     from_label_var.set("From:")
     to_label_var.set("To:")
 
-    translate_textbox = Entry(r, width=46)
+    double_trans_flag = IntVar()
+    double_trans_flag.set(1)
+    double_trans_check = Checkbutton(r, text="Translate from then back", variable=double_trans_flag)
+
+    translate_text = StringVar()
+    translate_textbox = Entry(r, width=46, textvariable=translate_text)
 
     def translate():
-        print("not auto")
+        global translate_text, from_lang, to_lang, r, curr_clip, double_trans_flag
+        translator = Translator()
+        text_to_trans = translate_text.get()
+        translated = translator.translate(text_to_trans, dest=to_lang, src=from_lang).text
+        r.clipboard_clear()
+        r.clipboard_append(translated)
+        curr_clip = translated
+
+        if double_trans_flag.get():
+            translated = translator.translate(translated, src=to_lang, dest=from_lang).text
+            r.clipboard_clear()
+            r.clipboard_append(translated)
+            curr_clip = translated
 
     button.config(command=translate)
 
@@ -134,8 +149,9 @@ if __name__ == "__main__":
     to_label.grid(row=0, column=1)
     from_lang_combo.grid(row=1)
     to_lang_combo.grid(row=1, column=1)
-    check_auto_button.grid(row=1, column=2)
+    check_auto_button.grid(row=1, column=2, sticky=W)
     translate_textbox.grid(row=2, columnspan=2)
     button.grid(row=2, column=2)
+    double_trans_check.grid(row=0, column=2, sticky=W)
 
     r.mainloop()
