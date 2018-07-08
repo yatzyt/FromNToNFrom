@@ -24,27 +24,61 @@ LANGS = {'Automatic': 'auto', 'Afrikaans': 'af', 'Albanian': 'sq', 'Amharic': 'a
          'Turkish': 'tr', 'Ukrainian': 'uk', 'Urdu': 'ur', 'Uzbek': 'uz', 'Vietnamese': 'vi',
          'Welsh': 'cy', 'Xhosa': 'xh', 'Yiddish': 'yi', 'Yoruba': 'yo', 'Zulu': 'zu'}
 
-# Auto Translate Flag
-auto = False
-
 # The language to translate from
 from_lang = "en"
 
 # The language to translate to
 to_lang = "zh-cn"
 
+# Id for tk's after
+after_id = ""
+
 if __name__ == "__main__":
     r = Tk()
 
+    # Initialize clipboard upon starting
+    curr_clip = r.clipboard_get()
+
+    print(curr_clip)
+
     r.title("FromNToNFrom")
+
+    auto = 0
+
+    # Checks if clipboard was updated
+    # Returns true if updated, false if not
+    def check_clipboard():
+        global curr_clip, r
+        temp = r.clipboard_get()
+        if temp != curr_clip:
+            curr_clip = temp
+            return True
+        else:
+            return False
+
+    # Listens for intervals
+    def run_listener(window, interval):
+        global after_id
+        if check_clipboard():
+            print("clip updated")
+        after_id = window.after(interval, run_listener, window, interval)
 
     # Creating auto translate option
     check_auto_var = IntVar()
 
+    button_text = StringVar()
+    button = Button(r, textvariable=button_text)
+
     # updates autoflag
     def update_auto():
-        global auto
+        global auto, r
         auto = check_auto_var.get()
+        if auto:
+            button.config(state=DISABLED)
+            run_listener(r, 500)
+        else:
+            button.config(state=NORMAL)
+            r.after_cancel(after_id)
         print(auto)
 
     check_auto_button = Checkbutton(r, text="Auto", variable=check_auto_var, command=update_auto)
@@ -83,14 +117,17 @@ if __name__ == "__main__":
     to_lang_combo = Combobox(r, state="readonly", width=20, textvariable=to_lang_var)
     to_lang_combo['values'] = list(LANGS.keys())
 
-    button_text = StringVar()
-    button = Button(r, textvariable=button_text)
     button_text.set("Translate")
 
     from_label_var.set("From:")
     to_label_var.set("To:")
 
     translate_textbox = Entry(r, width=46)
+
+    def translate():
+        print("not auto")
+
+    button.config(command=translate)
 
     # Pack the widgets in grids
     from_label.grid()
@@ -100,6 +137,5 @@ if __name__ == "__main__":
     check_auto_button.grid(row=1, column=2)
     translate_textbox.grid(row=2, columnspan=2)
     button.grid(row=2, column=2)
-
 
     r.mainloop()
