@@ -1,5 +1,6 @@
-from tkinter import *
-from tkinter.ttk import Combobox
+from tkinter import IntVar, StringVar, W
+from tkinter.ttk import *
+from ttkthemes import themed_tk as tk
 from googletrans import Translator
 
 LANGS = {'Automatic': 'auto', 'Afrikaans': 'af', 'Albanian': 'sq', 'Amharic': 'am', 'Arabic': 'ar',
@@ -34,7 +35,10 @@ to_lang = "zh-cn"
 after_id = ""
 
 if __name__ == "__main__":
-    r = Tk()
+    r = tk.ThemedTk()
+    r.get_themes()
+    r.set_theme("arc")
+    Style().configure('.', font='Helvetica')
 
     # Initialize clipboard upon starting
     curr_clip = r.clipboard_get()
