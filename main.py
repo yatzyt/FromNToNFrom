@@ -43,13 +43,33 @@ if __name__ == "__main__":
 
     auto = 0
 
+    def translate_auto(in_text):
+        global translate_text, from_lang, to_lang, r, curr_clip, double_trans_flag
+        translator = Translator()
+        text_to_trans = in_text
+        translated = translator.translate(text_to_trans, dest=to_lang, src=from_lang).text
+        print("Translate 1: {}".format(translated))
+        r.clipboard_clear()
+        r.clipboard_append(translated)
+        curr_clip = translated
+
+        if double_trans_flag.get():
+            translated = translator.translate(translated, src=to_lang, dest=from_lang).text
+            print("Translate 2: {}".format(translated))
+            r.clipboard_clear()
+            r.clipboard_append(translated)
+            curr_clip = translated
+
+        return translated
+
     # Checks if clipboard was updated
     # Returns true if updated, false if not
     def check_clipboard():
         global curr_clip, r
         temp = r.clipboard_get()
         if temp != curr_clip:
-            curr_clip = temp
+            translated = translate_auto(temp)
+            curr_clip = translated
             return True
         else:
             return False
